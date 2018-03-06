@@ -1,0 +1,43 @@
+---
+
+- name: Check user with UID 0 except root
+  shell: "awk -F: '($3 == 0) { print $1 }' /etc/passwd |grep -v root"
+  register: username
+  changed_when: false
+  failed_when: false
+
+- name: disable user with UID 0 except root
+  shell: "/usr/sbin/usermod -L {{ item }} "
+  with_items:
+    - "{{ username.stdout_lines }}"
+  when: username.stdout != ""
+
+  
+- name: Check User's emptypasswords
+  shell: awk -F":" '($2 == "") { print $1 }' /etc/shadow
+  register: epwduser
+  changed_when: false
+  failed_when: false
+
+- name: Disable emptypasswords user
+  shell: "/usr/sbin/usermod -L {{ item }}"
+  with_items:
+     - "{{ epwduser.stdout_lines }}"
+  when: epwduser.stdout != ""
+
+- name: Check system accounts
+  shell: "for user in `cut -d: -f1 /etc/passwd`; do passwd -S $user |grep 'in use' | awk '{print $1}' ; done"
+  register: sysaccount
+  changed_when: false
+  failed_when: false
+
+- name: Disable system accounts
+  shell: "usermod -L -s /dev/null {{ item }}"
+  with_items:
+    - "{{ sysaccount.stdout_lines }}"
+  when: sysaccount.stdout != ""
+
+- name: Disable nfsnobody 
+  shell: "usermod -L -s /dev/null nfsnobody"
+  changed_when: false
+  failed_when: false

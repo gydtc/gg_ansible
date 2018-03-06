@@ -1,0 +1,34 @@
+---
+
+- name: install ntp
+  yum:
+    name: ntp
+    state: present
+
+- name: set ntp config
+  copy: 
+    backup: yes
+    src: ntp.conf
+    dest: /etc/ntp.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart ntpd
+
+- name: modifiy /etc/sysconfig/ntpd 
+  lineinfile:
+    dest: /etc/sysconfig/ntpd
+    regexp: "^OPTIONS="
+    line: "OPTIONS=\"-u ntp:ntp -x -p /var/run/ntpd.pid -g\""
+
+- name: modifiy /etc/sysconfig/ntpdate 
+  lineinfile:
+    dest: /etc/sysconfig/ntpdate
+    regexp: "^SYNC_HWCLOCK="
+    line: "SYNC_HWCLOCK=yes"
+
+- name: enable ntpd service
+  service:
+    name: ntpd
+    state: started
+    enabled: yes

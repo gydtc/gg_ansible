@@ -1,0 +1,14 @@
+---
+
+- name: check runlevel
+  shell: "systemctl get-default"
+  changed_when: false
+  failed_when: false
+  register: runlevel
+
+- name: set runlevel 3
+  shell: "systemctl set-default multi-user.target"
+  when:
+    - runlevel.stdout != "multi-user.target"
+
+

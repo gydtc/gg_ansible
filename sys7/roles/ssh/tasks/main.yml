@@ -1,0 +1,56 @@
+---
+
+- name: set ssh port to 22
+  lineinfile:
+    backrefs: yes
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^[#]{0,1}Port.*"    
+    line: "Port 22"
+
+- name: set ssh protocol to 2
+  lineinfile:
+    backrefs: yes
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^[#]{0,1}Protocol.*"
+    line: "Protocol 2"
+
+
+- name: set ssh Loglevel to INFO
+  lineinfile:
+    backrefs: yes
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^[#]{0,1}LogLevel.*"
+    line: "LogLevel INFO"
+
+
+- name: set ssh PermitRootLogin to no
+  lineinfile:
+    backrefs: yes
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: "^[#]{0,1}PermitRootLogin.*"
+    line: "PermitRootLogin no"
+
+
+- name: set ssh MaxAuthTries to 6
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^[#]{0,1}MaxAuthTries.*"
+    line: "MaxAuthTries 6"
+
+
+- name: set ssh PermitEmptyPasswords to no
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^[#]{0,1}PermitEmptyPasswords.*"
+    line: "PermitEmptyPasswords no"
+
+
+- name: set ssh banner
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^[#]{0,1}Banner.*"
+    line: "Banner /etc/issue"

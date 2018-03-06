@@ -1,0 +1,28 @@
+---
+
+
+- name: add libselinux-python package 
+  copy: 
+    src:  libselinux-python-2.0.94-7.el6.x86_64.rpm
+    dest: /tmp/libselinux-python-2.0.94-7.el6.x86_64.rpm
+
+- name: install libselinux-python package
+  yum:
+    name: /tmp/libselinux-python-2.0.94-7.el6.x86_64.rpm
+    state: present
+
+- name: remove libselinux-python package 
+  file: 
+    path: /tmp/libselinux-python-2.0.94-7.el6.x86_64.rpm
+    state: absent
+
+- name: disable selinux
+  selinux:
+    state: disabled
+
+#- name: setup the config
+#  lineinfile:
+#    backup: yes
+#    path: /etc/selinux/config
+#    regexp: '^SELINUX='
+#    line: 'SELINUX=disabled'

@@ -1,0 +1,43 @@
+---
+
+- name: set histtimeformat with profile
+  lineinfile:
+    create: yes
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/profile.d/myhistory.sh
+    line: "export HISTTIMEFORMAT=\"%F %T \""
+
+- name: set prompt_command with profile
+  lineinfile:
+    dest: /etc/profile.d/myhistory.sh
+    line: "export PROMPT_COMMAND=\"history -a\""
+
+- name: set histcontrol with profile
+  lineinfile:
+    dest: /etc/profile.d/myhistory.sh
+    line: "export HISTCONTROL=\"ignoredups\""
+
+- name: set histsize with profile
+  lineinfile:
+    dest: /etc/profile.d/myhistory.sh
+    line: "export HISTSIZE=2000"
+
+- name: set login timeout with profile
+  lineinfile:
+    create: yes
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/profile.d/mytimeout.sh
+    line: "export TMOUT=600"
+
+- name: set umask value 
+  replace:
+    dest: /etc/{{ item }}
+    regexp: "umask 0.*"
+    replace: "umask 027"
+  with_items:
+    - bashrc
+    - profile

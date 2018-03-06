@@ -1,0 +1,10 @@
+---
+
+- name: copy banner file
+  copy:
+    src: issue
+    dest: /etc/{{ item }}
+  with_items:
+    - issue
+    - issue.net
+    - motd

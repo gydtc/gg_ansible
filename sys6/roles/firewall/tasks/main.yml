@@ -1,0 +1,27 @@
+---
+
+- name: check iptables service
+  stat:
+    path: /etc/init.d/iptables
+  register: iptables_service
+
+- name: disable iptables service
+  service:
+    name: iptables
+    state: stopped
+    enabled: no
+  when: 
+    - iptables_service.stat.exists
+
+- name: check ip6tables service
+  stat:
+    path: /etc/init.d/ip6tables
+  register: ip6tables_service
+
+- name: disable ip6tables service
+  service:
+    name: ip6tables
+    state: stopped
+    enabled: no
+  when: 
+    - ip6tables_service.stat.exists

@@ -1,0 +1,60 @@
+- name: set password aging (PASS_MAX_DAYS)
+  lineinfile:
+    backrefs: yes
+    dest: /etc/login.defs
+    state: present
+    regexp: "^PASS_MAX_DAYS"
+    line: "PASS_MAX_DAYS 90"
+   
+
+- name: set password aging (PASS_MIN_DAYS)
+  lineinfile:
+    backrefs: yes
+    dest: /etc/login.defs
+    state: present
+    regexp: "^PASS_MIN_DAYS"
+    line: "PASS_MIN_DAYS 2"
+    
+- name: set password aging (PASS_MIN_LEN)
+  lineinfile:
+    backrefs: yes
+    dest: /etc/login.defs
+    state: present
+    regexp: "^PASS_MIN_LEN"
+    line: "PASS_MIN_LEN 8"
+    
+- name: set password aging (PASS_WARN_AGE)
+  lineinfile:
+    backrefs: yes
+    dest: /etc/login.defs
+    state: present
+    regexp: "^PASS_WARN_AGE"
+    line: "PASS_WARN_AGE 7"
+
+- name: modify password complexity
+  lineinfile:
+    backrefs: yes
+    dest: /etc/pam.d/system-auth-ac
+    state: present
+    regexp: "^password    requisite     pam_cracklib.so"
+    line: "password    requisite     pam_cracklib.so try_first_pass retry=3 minlen=8 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1"
+
+- name: modify password multiplexing
+  lineinfile:
+    backrefs: yes
+    dest: /etc/pam.d/system-auth-ac
+    state: present
+    regexp: "^password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok"
+    line: "password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass use_authtok remember=5"
+
+- name: modify password locking 
+  lineinfile:
+    dest: /etc/pam.d/{{ item }}
+    state: present
+    insertafter: "# User"
+    line: "auth        required      pam_tally2.so onerr=fail deny=6 unlock_time=300"
+  with_items:
+    - system-auth-ac
+    - password-auth-ac
+
+

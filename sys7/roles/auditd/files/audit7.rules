@@ -1,0 +1,35 @@
+## First rule - delete all
+-D
+
+## Increase the buffers to survive stress events.
+## Make this bigger for busy systems
+-b 8192
+
+## Set failure mode to syslog
+-f 1
+
+-a exit,always -F arch=b64 -S execve -k exec
+-a exit,always -F arch=b32 -S execve -k exec
+-w /etc/crontab -p wa -k crontab
+-w /etc/hosts -p wa -k hosts
+-w /etc/hosts.allow -p wa -k hosts-allow
+-w /etc/hosts.deny -p wa -k hosts-deny
+-w /etc/fstab -p wa -k fstab
+-w /etc/passwd -p wa -k passwd
+-w /etc/shadow -p wa -k shadow
+-w /etc/group -p wa -k group
+-w /etc/gshadow -p wa -k gshadow
+-w /etc/ntp.conf -p wa -k ntp
+-w /etc/sysctl.conf -p wa -k sysctl
+-w /etc/security/limits.conf -p wa -k limits
+-w /boot/grub/grub.conf -p wa -k grub
+-w /etc/ssh/sshd_config -p wa -k ssh
+-w /etc/udev/rules.d/ -p wa -k udev
+-w /etc/profile -p wa -k profile
+-w /etc/kdump.conf -p wa -k kdump
+-w /etc/lvm/lvm.conf -p wa -k lvm
+-w /etc/login.defs -p wa -k login-defs
+-w /etc/rsyslog.conf -p wa -k rsyslog
+-w /etc/sysconfig/i18n -p wa -k i18n
+-w /etc/sysconfig/network -p wa -k network
+-w /etc/multipath.conf -p wa -k multipath

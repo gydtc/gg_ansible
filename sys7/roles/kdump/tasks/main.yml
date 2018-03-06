@@ -1,0 +1,21 @@
+---
+
+- name: modify kdump.conf
+  lineinfile:
+    backrefs: yes
+    dest: /etc/kdump.conf
+    regexp: "^path"
+    line: "path /kdump"
+
+- name: create /kdump directory
+  file:
+    dest: /kdump
+    state: directory
+    mode: 0755
+
+- name: enabled sysrq
+  sysctl:
+    name: kernel.sysrq
+    value: 1
+    state: present
+    sysctl_file: /etc/sysctl.d/kdump.conf

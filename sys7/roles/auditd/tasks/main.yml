@@ -1,0 +1,36 @@
+---
+
+- name: set the audit rules
+  copy: 
+    src: audit7.rules
+    dest: /etc/audit/rules.d/audit.rules
+    owner: root
+    group: root
+    mode: 0640
+
+- name: modify audit log num 
+  lineinfile: 
+    backrefs: yes
+    state: present
+    dest: /etc/audit/auditd.conf
+    regexp: "^num_logs ="
+    line: "num_logs = 4"
+
+- name: modify audit log size
+  lineinfile: 
+    backrefs: yes
+    state: present
+    dest: /etc/audit/auditd.conf
+    regexp: "^max_log_file ="
+    line: "max_log_file = 50"
+
+- name: modify audit flush
+  lineinfile: 
+    backrefs: yes
+    state: present
+    dest: /etc/audit/auditd.conf
+    regexp: "^flush ="
+    line: "flush = NONE"
+
+- name: restart audit service
+  shell: service auditd restart

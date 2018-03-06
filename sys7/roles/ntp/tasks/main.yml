@@ -1,0 +1,21 @@
+---
+
+- name: install chrony
+  yum:
+    name: chrony
+    state: present
+
+- name: set chrony config
+  copy: 
+    backup: yes
+    src: chrony.conf
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: enable chrony service
+  service:
+    name: chronyd
+    state: restarted
+    enabled: yes

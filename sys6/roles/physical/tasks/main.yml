@@ -1,0 +1,19 @@
+---
+
+- name: disable usb storage
+  lineinfile:
+    create: yes
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/modprobe.d/usb-storage.conf
+    line: "install usb-storage /bin/true"
+
+- name: disable control+alt+delete
+  lineinfile:
+    create: yes
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/init/control-alt-delete.override
+    line: "exec /usr/bin/logger -p kern.warn -t init \"Ctrl-Alt-Del was pressed and ignored\""

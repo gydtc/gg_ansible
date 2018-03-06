@@ -1,0 +1,21 @@
+---
+
+- name: add centos6 baseline repo
+  copy:
+    src:  centos6.repo
+    dest: /etc/yum.repos.d/centos6.repo
+
+- name: add yum-plugin-priorities package 
+  copy: 
+    src:  yum-plugin-priorities-1.1.30-40.el6.noarch.rpm
+    dest: /tmp/yum-plugin-priorities-1.1.30-40.el6.noarch.rpm
+
+- name: install yum-plugin-priorities package 
+  yum:
+    name: /tmp/yum-plugin-priorities-1.1.30-40.el6.noarch.rpm
+    state: present
+
+- name: remove yum-plugin-priorities package
+  file: 
+    path: /tmp/yum-plugin-priorities-1.1.30-40.el6.noarch.rpm
+    state: absent

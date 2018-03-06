@@ -1,0 +1,8 @@
+---
+
+- name: set runlevel 3
+  lineinfile:
+    dest: /etc/inittab
+    state: present
+    regexp: "^id:"
+    line: "id:3:initdefault:"

@@ -1,0 +1,30 @@
+---
+
+- name: set permissions and owner for rhel7
+  file:
+    path: "{{ item.i_path }}"
+    owner: root
+    group: root
+    mode: "{{ item.i_mode }}"
+  with_items:
+    - { i_path: '/tmp', i_mode: '1777' }
+    - { i_path: '/var/tmp', i_mode: '1777' }
+    - { i_path: '/etc/passwd', i_mode: '0644' }
+    - { i_path: '/etc/group', i_mode: '0644' }
+    - { i_path: '/etc/shadow', i_mode: '0000' }
+    - { i_path: '/etc/gshadow', i_mode: '0000' }
+    - { i_path: '/etc/hosts', i_mode: '0664' }
+    - { i_path: '/etc/sysctl.conf', i_mode: '0644' }
+    - { i_path: '/etc/crontab', i_mode: '0400' }
+    - { i_path: '/etc/securetty', i_mode: '0400' }
+    - { i_path: '/etc/login.defs', i_mode: '0640' }
+
+- name: remove dangerous files
+  file:
+    dest: "{{ item }}"
+    state: absent
+  with_items:
+    - /root/.rhosts
+    - /root/.shosts
+    - /etc/hosts.equiv
+    - /etc/shosts.equiv

@@ -1,0 +1,8 @@
+---
+
+- name: set network dns
+  lineinfile:
+    dest: /etc/resolv.conf
+    line: "nameserver {{ item }}"
+  with_items: 
+    - "{{ dnsipset }}"

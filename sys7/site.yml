@@ -1,0 +1,7 @@
+---
+
+- name: baseline
+  hosts: test
+  gather_facts: true
+  roles:
+    - account

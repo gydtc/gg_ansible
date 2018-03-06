@@ -1,0 +1,23 @@
+---
+
+- name: disable usb storage
+  lineinfile:
+    create: yes
+    owner: root
+    group: root
+    mode: 0644
+    dest: /etc/modprobe.d/usb-storage.conf
+    line: "install usb-storage /bin/true"
+
+- name: check ctrl-atl-del 
+  shell: "systemctl is-enabled ctrl-alt-del.target"
+  changed_when: false
+  failed_when: false
+  register: ctrlaltdel
+
+
+- name: disable ctrl-alt-del 
+  shell: "systemctl mask ctrl-alt-del.target"
+  when:
+    - ctrlaltdel.stdout != "masked"
+

@@ -1,0 +1,31 @@
+---
+
+- name: modify logfile rotate
+  lineinfile:
+    backrefs: yes
+    dest: /etc/logrotate.conf
+    state: present
+    regexp: "^rotate 4"
+    line: "rotate 24"
+    
+- name: modify crontab config
+  lineinfile:
+    backrefs: yes 
+    state: present
+    dest: /etc/crontab
+    regexp: "^MAILTO.*"
+    line: 'MAILTO=""'
+    
+- name: set /etc/pam.d/su step1
+  lineinfile:
+    backrefs: yes
+    state: present
+    dest:  /etc/pam.d/su
+    regexp: "pam_wheel.so use_uid.*"
+    line: "auth            required        pam_wheel.so use_uid root_only"
+    
+- name: set /etc/pam.d/su step1
+  lineinfile:
+    dest:  /etc/login.defs
+    line: "SU_WHEEL_ONLY yes"
+ 

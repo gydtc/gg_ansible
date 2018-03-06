@@ -1,0 +1,46 @@
+---
+
+- name: disable and stop forbid services for rhel7
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  with_items:
+    - autofs
+    - dnsmasq
+    - firewalld
+    - rhnsd
+    - rhsmcertd
+    - bluetooth
+    - cups-browsed
+    - cups
+    - postfix
+    - ModemManager
+    - rpcbind
+    - NetworkManager
+    - rpc-statd
+    - nfs-server
+    - nfs-idmapd
+    - nfs-config
+    - nfs-mountd
+    - upower
+    - gssproxy
+    - gdm
+    - avahi-daemon
+    - dmraid-activation
+    - firstboot-graphical
+    - iscsid
+    - libvirtd
+    - mdmonitor
+    - microcode
+    - qemu-guest-agent
+    - spice-vdagentd
+    - nfs-client.target
+    - zebra
+    - ypbind
+    - rlogin.socket 
+    - rsh.socket
+    - rexec.socket 
+    - xinetd
+  changed_when: false
+  failed_when: false

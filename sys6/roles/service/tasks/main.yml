@@ -1,0 +1,42 @@
+---
+
+- name: disable and stop  services 
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  with_items:
+    - acpid
+    - autofs
+    - avahi-daemon
+    - bluetooth
+    - cups
+    - dnsmasq
+    - firstboot
+    - iptables
+    - ip6tables
+    - NetworkManger
+    - netfs
+    - nfs
+    - nfslock
+    - rpcbind
+    - rpcgssd
+    - rpcidmapd
+    - rpcsvcgssd
+    - postfix
+    - postgresql
+    - pppoe-server
+    - pcscd
+    - smb
+    - httpd
+    - squid
+    - smartd
+    - spice-vdagentd
+    - rhnsd
+    - rhsmcertd
+    - wpa_supplicant
+    - winbind
+    - ypbind
+    - xinetd
+  changed_when: false
+  failed_when: false
