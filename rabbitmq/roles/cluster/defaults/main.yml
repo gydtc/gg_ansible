@@ -1,0 +1,10 @@
+---
+rabbitmq_cookie: SMVJIGNWQRYFKNXQLUVC
+rabbitmq_port: 5672
+rabbitmq_ad: admin
+rabbitmq_adpass: admin
+rabbitmq_master: d1
+rabbitmqs:
+  - { m_ip: 192.168.88.141,m_name: d1}
+  - { m_ip: 192.168.88.142,m_name: d2}
+  - { m_ip: 192.168.88.143,m_name: d3}

@@ -1,0 +1,21 @@
+---
+
+- name: del user guest
+  rabbitmq_user:
+    user: guest
+    state: absent
+  when: inventory_hostname in  groups['rabbitmq_m']
+
+- name: add user admin
+  rabbitmq_user:
+    user: "{{ rabbitmq_ad }}"
+    password: "{{ rabbitmq_adpass }}"
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+  when: inventory_hostname in  groups['rabbitmq_m']
+
+- name: set user admin tag administrator
+  shell: "/usr/sbin/rabbitmqctl set_user_tags {{ rabbitmq_ad }} administrator"
+  when: inventory_hostname in  groups['rabbitmq_m']

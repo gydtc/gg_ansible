@@ -1,0 +1,7 @@
+---
+
+- name: rabbitmq cluster
+  hosts: all
+  gather_facts: true
+  roles:
+    - cluster

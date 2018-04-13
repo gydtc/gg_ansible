@@ -1,0 +1,36 @@
+
+- name: a
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: check rabbitmq is already run
+      command: rabbitmqctl -n rabbit@{{ ansible_hostname }} status
+      register: rabbitmq_check
+      ignore_errors: true
+      changed_when: false 
+      when: inventory_hostname in  groups['a']
+    
+    - name: test 123
+      lineinfile:
+        path: /etc/hosts
+        line: '127.0.0.1 {{ ansible_hostname }}'
+
+    - debug:
+        msg: "{{ item }}"
+        with_inventory_hostnames:
+          - all
+
+    - name: get hostsname
+      lineinfile:
+        path: /tmp/tmp_hostname123
+        create: yes
+        line: '{{ ansible_default_ipv4.address }}  {{ ansible_hostname }}'
+      delegate_to: a
+
+    - name: aaaaaaa
+      lineinfile:
+        path: /tmp/ggao
+        line: '{{ item }}'
+        create: yes
+      with_file:
+        - "/tmp/123456"

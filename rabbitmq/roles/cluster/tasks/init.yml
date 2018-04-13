@@ -1,0 +1,37 @@
+---
+
+- name: install rabbitmq
+  yum:
+    name: rabbitmq-server
+    state: present
+
+- name: start rabbitmq
+  service: 
+    name: rabbitmq-server
+    state: started
+
+- name: stop rabbitmq
+  service: 
+    name: rabbitmq-server
+    state: stopped
+
+- name: wait for rabbitmq to stopped port {{ rabbitmq_port }}
+  wait_for:
+    port: "{{ rabbitmq_port }}"
+    state: stopped
+    timeout: 10
+  ignore_errors: yes
+
+- name: apply rabbitmq cookie
+  template:
+    dest: /var/lib/rabbitmq/.erlang.cookie
+    force: yes
+    src: erlang.cookie.j2
+    owner: rabbitmq
+    group: rabbitmq
+    mode: 0600
+
+- name: active rabbitmq plugins
+  rabbitmq_plugin:
+    names: rabbitmq_management,rabbitmq_management_agent,rabbitmq_management_visualiser,rabbitmq_federation,rabbitmq_federation_management
+    state: enabled

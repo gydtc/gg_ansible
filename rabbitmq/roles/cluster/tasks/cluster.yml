@@ -1,0 +1,41 @@
+---
+
+- name: add 127.0.0.1 hostname
+  lineinfile:
+    path: /etc/hosts
+    line: '127.0.0.1 {{ ansible_hostname }}'
+
+- name: add rabbitmq hosts to the hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item.m_ip }} {{ item.m_name }}"
+  with_items:
+    - "{{ rabbitmqs }}"
+
+- name: start rabbitmq master
+  service: 
+    name: rabbitmq-server
+    state: started
+  when: inventory_hostname in  groups['rabbitmq_m']
+
+- name: wait for rabbitmq master to be running
+  wait_for:
+    port: "{{ rabbitmq_port }}"
+  when: inventory_hostname in  groups['rabbitmq_m']
+
+
+- name: start rabbitmq nodes
+  shell: "/usr/sbin/rabbitmq-server -detached"
+  when: inventory_hostname in  groups['rabbitmq_j']
+
+- name: stop rabbitmq app 
+  shell: "/usr/sbin/rabbitmqctl stop_app"
+  when: inventory_hostname in  groups['rabbitmq_j']
+
+- name: cluster all nodes to the first node
+  shell: "/usr/sbin/rabbitmqctl join_cluster rabbit@{{ rabbitmq_master }}"
+  when: inventory_hostname in  groups['rabbitmq_j']
+
+- name: start rabbitmq app
+  shell: "/usr/sbin/rabbitmqctl start_app"
+  when: inventory_hostname in  groups['rabbitmq_j']
