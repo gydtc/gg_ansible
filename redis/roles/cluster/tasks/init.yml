@@ -1,0 +1,75 @@
+---
+
+- name: install redis
+  yum:
+    name: redis
+    state: present
+
+- name: install redis-trib
+  yum:
+    name: redis-trib
+    state: present
+
+- name: enable redis
+  service: 
+    name: redis
+    enabled: yes
+
+- name: download gem-redis
+  get_url: 
+    url: https://rubygems.org/downloads/redis-3.3.5.gem
+    dest: /tmp/redis-3.3.5.gem
+
+- name: install gem-redis
+  gem:
+    name: redis
+    gem_source: /tmp/redis-3.3.5.gem
+    state: present
+
+- name: mkdir for redis
+  file:
+    path: "{{ item }}"
+    owner: redis
+    group: redis
+    mode: 0750
+    state: directory
+  with_items:
+    - "{{ redis_workdir }}"
+    - "{{ redis_workdir }}/log"
+
+- name: set redis_m config
+  template:
+    src: redis.conf_m.j2
+    dest: /etc/redis_{{ redis_port_m }}.conf
+    owner: redis
+    group: root
+    mode: 0640
+
+- name: set redis_s config
+  template:
+    src: redis.conf_s.j2
+    dest: /etc/redis_{{ redis_port_s }}.conf
+    owner: redis
+    group: root
+    mode: 0640
+
+- name: start redis_m
+  become_user: redis
+  shell: "/usr/bin/redis-server /etc/redis_{{ redis_port_m }}.conf"
+
+- name: start redis_s
+  become_user: redis
+  shell: "/usr/bin/redis-server /etc/redis_{{ redis_port_s }}.conf"
+
+- name: set cluster init shell
+  template:
+    src: create_cluster.sh.j2
+    dest: /root/create_cluster.sh
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_default_ipv4.address  == redis_master
+
+- name: create redis cluster
+  shell: /root/create_cluster.sh
+  when: ansible_default_ipv4.address  == redis_master

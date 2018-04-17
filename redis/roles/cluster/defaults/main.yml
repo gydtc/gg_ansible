@@ -1,0 +1,6 @@
+---
+redis_master: 192.168.88.141
+redis_port_m: 6379
+redis_port_s: 6380
+redis_workdir: /opt/redis
+

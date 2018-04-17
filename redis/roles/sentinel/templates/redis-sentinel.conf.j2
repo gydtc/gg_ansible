@@ -1,0 +1,8 @@
+port {{ redis_sentinel_port }}
+dir {{ redis_sentinel_workdir }}
+protected-mode no
+sentinel monitor {{ redis_sentinel_name }} {{ redis_master }} {{ redis_port }} {{ num_sentinel }}
+sentinel down-after-milliseconds {{ redis_sentinel_name }} 30000
+sentinel parallel-syncs {{ redis_sentinel_name }} 1
+sentinel failover-timeout {{ redis_sentinel_name }} 180000
+logfile {{ redis_sentinel_workdir }}/log/sentinel.log

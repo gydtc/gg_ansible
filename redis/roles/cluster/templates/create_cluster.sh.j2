@@ -1,0 +1,5 @@
+#!/bin/bash
+hosts_m="{% for host in groups['redis'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ redis_port_m }} {% endfor %}"
+hosts_s="{% for host in groups['redis'] %}{{ hostvars[host]['inventory_hostname'] }}:{{ redis_port_s }} {% endfor %}"
+
+yes 'yes' | /usr/bin/redis-trib create --replicas 1 $hosts_m $hosts_s
