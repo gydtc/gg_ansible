@@ -73,3 +73,8 @@
 - name: create redis cluster
   shell: /root/create_cluster.sh
   when: ansible_default_ipv4.address  == redis_master
+
+- name: del cluster init shell
+  file:
+    path: /root/create_cluster.sh
+    state: absent
