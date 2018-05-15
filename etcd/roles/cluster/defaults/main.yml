@@ -1,0 +1,8 @@
+---
+etcd_cluster_id: etcd_cluster_gg
+etcd_local: 127.0.0.1
+etcd_port_client: 2379
+etcd_port_cluster: 2380
+etcd_cluster: "{% for host in groups[etcd] %}{{hostvars[host]['inventory_hostname']}}={{etcd_scheme}}://{% if etcd_use_ips %}{{hostvars[host]['ansible_' + etcd_network_iface]['ipv4']['address']}}{% else %}{{host}}{% endif %}:2380{% if not loop.last %},{% endif %}{% endfor %}"
+
+

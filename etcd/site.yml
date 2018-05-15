@@ -1,0 +1,7 @@
+---
+
+- name: etcd cluster
+  hosts: all
+  gather_facts: true
+  roles:
+    - cluster

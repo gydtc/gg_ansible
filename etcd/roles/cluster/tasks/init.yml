@@ -1,0 +1,42 @@
+---
+
+- name: install etcd
+  yum:
+    name: etcd
+    state: present
+
+- name: enable etcd
+  service: 
+    name: etcd
+    enable: yes
+
+- name: set etcd cluster config
+  template:
+    dest: /etc/etcd/etcd.conf
+    src: etcd.conf.j2
+    force: yes
+    owner: root
+    group: root
+    mode: 0644
+
+- name: mkdir etcd datadir
+  file:
+    path: "/var/lib/etcd/{{ ansible_hostname }}"
+    owner: etcd
+    group: etcd
+    mode: 0755
+    state: directory
+
+- name: set etcd cluster service
+  template:
+    dest: /usr/lib/systemd/system/etcd.service 
+    src: etcd.service.j2
+    force: yes
+    owner: root
+    group: root
+    mode: 0644
+
+- name: start etcd
+  service: 
+    name: etcd
+    state: started

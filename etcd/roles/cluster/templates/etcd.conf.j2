@@ -1,0 +1,11 @@
+ETCD_NAME="{{ ansible_hostname }}"
+ETCD_DATA_DIR="/var/lib/etcd/{{ ansible_hostname }}"
+ETCD_LISTEN_PEER_URLS="http://{{ ansible_default_ipv4.address }}:{{ etcd_port_cluster }}"									
+ETCD_LISTEN_CLIENT_URLS="http://{{ ansible_default_ipv4.address }}:{{ etcd_port_client }},http://{{ etcd_local }}:{{ etcd_port_client }}"
+ETCD_INITIAL_ADVERTISE_PEER_URLS="http://{{ ansible_default_ipv4.address }}:{{ etcd_port_cluster }}"
+ETCD_INITIAL_CLUSTER="etcd_d1=http://192.168.88.141:{{ etcd_port_cluster }},etcd_d2=http://192.168.88.142:{{ etcd_port_cluster }},etcd_d3=http://192.168.88.142:{{ etcd_port_cluster }}"
+ETCD_INITIAL_CLUSTER_STATE="new"
+ETCD_INITIAL_CLUSTER_TOKEN="{{ etcd_cluster_id }}"
+ETCD_ADVERTISE_CLIENT_URLS="http://{{ ansible_default_ipv4.address }}:{{ etcd_port_client }}"	
+
+
